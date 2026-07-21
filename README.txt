@@ -1,20 +1,28 @@
-BloodPressure PWA V4
+BloodPressure PWA V3.1
 
-PWA 會把新增的最後一筆資料傳給 iPhone 捷徑 BloodPressureToiCloud。
+本版修改：
+1. 匯出與 iCloud 分享的檔名固定為：
+   BloodPressure.csv
 
-捷徑設定：
-1. 捷徑名稱：BloodPressureToiCloud
-2. 「文字」動作內容設為「捷徑輸入」
-3. 「附加到文字檔案」
-   位置：iCloud 雲碟
-   路徑：BloodPressure/BloodPressure.csv
-   新增一行：開啟
+2. 分享內容只包含 CSV 檔案，不再附帶文字內容，
+   因此不會再產生額外的「文字」檔。
 
-CSV 必須先存在：
-iCloud Drive/BloodPressure/BloodPressure.csv
+3. 保留 V3 功能：
+   - 本機保存
+   - 血壓趨勢圖
+   - 歷史紀錄
+   - 搜尋、編輯與刪除
+   - CSV 匯入與匯出
+   - 深色模式
+   - 離線使用
 
-第一行：
-日期,時間,收縮壓,舒張壓,心跳,備註
+更新 GitHub Pages：
+1. 解壓縮此 ZIP。
+2. 將所有檔案上傳並覆蓋 Repository 根目錄舊檔。
+3. 等待 GitHub Pages 部署完成。
+4. 若仍顯示舊版，清除 phyen1126.github.io 的 Safari 網站資料，
+   或刪除舊主畫面 App 後重新加入。
 
-更新 GitHub：
-將 ZIP 解壓後的全部內容覆蓋 Repository 根目錄。
+iCloud 注意事項：
+iPhone 的「儲存到檔案」若遇到同名檔案，可能仍會自動建立
+BloodPressure 2.csv。此行為由 iOS 控制，PWA 無法強制覆蓋。
