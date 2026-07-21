@@ -1,1 +1,156 @@
-<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0f172a"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="血壓紀錄"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icons/icon-192.png"><link rel="stylesheet" href="styles.css"><title>血壓紀錄</title></head><body><main class="app"><header><div><p>Blood Pressure Logger</p><h1>血壓紀錄</h1></div></header><section class="card"><h2>新增紀錄</h2><form id="bpForm"><div class="grid"><label>收縮壓<input id="sys" type="number" min="50" max="260" required placeholder="125"></label><label>舒張壓<input id="dia" type="number" min="30" max="180" required placeholder="78"></label><label>心跳<input id="hr" type="number" min="30" max="220" required placeholder="69"></label><label>備註<input id="note" type="text" maxlength="100" placeholder="睡前"></label></div><button class="primary">儲存紀錄</button></form><div id="status" class="status hidden"></div></section><section class="summary"><div><span>最近血壓</span><strong id="latest">—</strong></div><div><span>平均血壓</span><strong id="average">—</strong></div><div><span>紀錄筆數</span><strong id="count">0</strong></div></section><section class="card"><div class="head"><h2>趨勢</h2><select id="range"><option value="7">最近 7 筆</option><option value="14">最近 14 筆</option><option value="30">最近 30 筆</option></select></div><canvas id="chart" width="700" height="320"></canvas></section><section class="card"><div class="head"><h2>歷史紀錄</h2><button id="clearBtn" class="danger">清除全部</button></div><div id="empty">尚無紀錄</div><div class="table-wrap"><table id="table" class="hidden"><thead><tr><th>日期時間</th><th>血壓</th><th>心跳</th><th>備註</th><th></th></tr></thead><tbody></tbody></table></div></section><section class="card actions"><button id="exportBtn">匯出 CSV</button><label class="file">匯入 CSV<input id="importInput" type="file" accept=".csv,text/csv"></label><button id="shareBtn">分享備份</button></section><p class="notice">本工具僅供個人紀錄，不取代醫療診斷。若數值異常或身體不適，請依醫師指示處理。</p></main><script src="app.js"></script></body></html>
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0f172a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="血壓紀錄">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="apple-touch-icon" href="./icons/icon-192.png">
+  <link rel="stylesheet" href="./styles.css">
+  <title>血壓紀錄</title>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div>
+        <div class="eyebrow">Blood Pressure Logger</div>
+        <h1>血壓紀錄</h1>
+      </div>
+      <div class="top-actions">
+        <button id="themeBtn" class="icon-btn" aria-label="切換深色模式">◐</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero card">
+        <div class="hero-copy">
+          <span class="badge">本機離線保存</span>
+          <h2>快速記錄每日血壓</h2>
+          <p>自動記錄日期與時間，可匯出 CSV 給 Excel 或 Numbers 使用。</p>
+        </div>
+        <form id="bpForm" class="entry-form">
+          <input type="hidden" id="editId">
+          <div class="form-grid">
+            <label>
+              <span>收縮壓 SYS</span>
+              <input id="sys" type="number" inputmode="numeric" min="50" max="260" required placeholder="125">
+            </label>
+            <label>
+              <span>舒張壓 DIA</span>
+              <input id="dia" type="number" inputmode="numeric" min="30" max="180" required placeholder="78">
+            </label>
+            <label>
+              <span>心跳 HR</span>
+              <input id="hr" type="number" inputmode="numeric" min="30" max="220" required placeholder="69">
+            </label>
+            <label>
+              <span>備註</span>
+              <input id="note" type="text" maxlength="120" placeholder="例如：睡前、服藥後">
+            </label>
+          </div>
+          <div class="form-actions">
+            <button id="saveBtn" class="primary" type="submit">儲存紀錄</button>
+            <button id="cancelEditBtn" class="secondary hidden" type="button">取消編輯</button>
+          </div>
+        </form>
+        <div id="status" class="status hidden"></div>
+      </section>
+
+      <section class="stats-grid">
+        <article class="stat-card">
+          <span>最近一次</span>
+          <strong id="latestBp">—</strong>
+          <small id="latestTime">尚無紀錄</small>
+        </article>
+        <article class="stat-card">
+          <span>平均血壓</span>
+          <strong id="avgBp">—</strong>
+          <small id="avgHr">平均心跳 —</small>
+        </article>
+        <article class="stat-card">
+          <span>本月紀錄</span>
+          <strong id="monthCount">0</strong>
+          <small id="totalCount">總計 0 筆</small>
+        </article>
+        <article class="stat-card">
+          <span>最近狀態</span>
+          <strong id="latestClass">—</strong>
+          <small>僅供個人紀錄</small>
+        </article>
+      </section>
+
+      <section class="card">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow">TREND</span>
+            <h2>趨勢圖</h2>
+          </div>
+          <select id="chartRange">
+            <option value="7">最近 7 筆</option>
+            <option value="14">最近 14 筆</option>
+            <option value="30">最近 30 筆</option>
+            <option value="9999">全部</option>
+          </select>
+        </div>
+        <canvas id="chart" width="900" height="360"></canvas>
+        <div class="legend">
+          <span><i class="dot sys-dot"></i>收縮壓</span>
+          <span><i class="dot dia-dot"></i>舒張壓</span>
+          <span><i class="dot hr-dot"></i>心跳</span>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="section-head history-head">
+          <div>
+            <span class="eyebrow">HISTORY</span>
+            <h2>歷史紀錄</h2>
+          </div>
+          <div class="history-tools">
+            <input id="searchInput" type="search" placeholder="搜尋日期、數值或備註">
+            <select id="sortOrder">
+              <option value="desc">最新優先</option>
+              <option value="asc">最舊優先</option>
+            </select>
+          </div>
+        </div>
+        <div id="emptyState" class="empty">尚無紀錄</div>
+        <div class="table-wrap">
+          <table id="historyTable" class="hidden">
+            <thead>
+              <tr><th>日期時間</th><th>血壓</th><th>心跳</th><th>狀態</th><th>備註</th><th>操作</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="card backup-card">
+        <div>
+          <span class="eyebrow">BACKUP</span>
+          <h2>備份與移轉</h2>
+          <p>定期匯出 CSV 並存到 iCloud Drive，可避免清除瀏覽器資料後遺失紀錄。</p>
+        </div>
+        <div class="backup-actions">
+          <button id="exportBtn">匯出 CSV</button>
+          <button id="shareBtn">分享備份</button>
+          <label class="file-button">匯入 CSV
+            <input id="importInput" type="file" accept=".csv,text/csv">
+          </label>
+          <button id="clearBtn" class="danger-btn">清除全部</button>
+        </div>
+      </section>
+
+      <section class="medical-note">
+        <strong>醫療提醒：</strong>
+        本工具只用於個人紀錄，不作為診斷依據。若血壓非常高、持續異常或伴隨胸痛、呼吸困難、劇烈頭痛、視力改變等症狀，請立即尋求醫療協助。
+      </section>
+    </main>
+  </div>
+
+  <script src="./app.js"></script>
+</body>
+</html>
