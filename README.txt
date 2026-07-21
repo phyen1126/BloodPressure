@@ -1,22 +1,24 @@
-BloodPressure PWA V6
+BloodPressure PWA V6.1
 
-V6 修正：
-- 完全移除 navigator.share 分享流程。
-- 不會再產生額外的「文字」檔。
-- 完全移除 iPhone 捷徑相依性。
-- 匯出 CSV 檔名固定為 BloodPressure.csv。
-- 保留本機紀錄、趨勢、統計、搜尋、排序、編輯、刪除、匯入、深色模式與離線功能。
+新增：
+- 每次新增紀錄後，自動開啟 iPhone 分享選單。
+- 選「儲存到檔案」即可存入 iCloud Drive。
+- 分享內容只包含 BloodPressure.csv，不附帶 text 欄位。
+- 另提供「儲存到 iCloud」按鈕，可隨時手動備份。
 
-GitHub Pages 更新：
+保留：
+- 本機紀錄
+- 趨勢圖與統計
+- 搜尋、排序、編輯與刪除
+- CSV 匯入與直接下載
+- 深色模式與離線使用
+
+更新 GitHub Pages：
 1. 解壓縮 ZIP。
-2. 將所有檔案上傳並覆蓋 Repository 根目錄。
-3. 等待 GitHub Pages 部署。
-4. 刪除舊主畫面 App。
-5. iPhone：設定 → Safari → 進階 → 網站資料。
-6. 搜尋 phyen1126.github.io 並刪除網站資料。
-7. 用 Safari 重新開啟網站，再加入主畫面。
+2. 將所有檔案覆蓋 GitHub Repository 根目錄。
+3. 等待 Pages 重新部署。
+4. 如仍看到舊版，刪除舊主畫面 App及該網站的 Safari 網站資料，再重新加入主畫面。
 
-重要限制：
-- iOS 若下載資料夾已有同名檔案，可能自動命名成 BloodPressure 2.csv。
-- 這是 iOS 下載管理行為，PWA 無法強制覆蓋既有檔案。
-- V6 的核心資料保存在瀏覽器本機，請定期下載 CSV 備份。
+注意：
+- iOS 若目的地已有同名 BloodPressure.csv，可能仍自行建立 BloodPressure 2.csv。
+- 這是 iOS「儲存到檔案」的系統行為，PWA 無法強制覆蓋。

@@ -107,6 +107,24 @@ function buildCSV(){
   });
   return '\ufeff'+rows.map(row=>row.map(csvEscape).join(',')).join('\r\n')
 }
+
+async function openICloudSave(){
+  const file=new File([buildCSV()],'BloodPressure.csv',{type:'text/csv;charset=utf-8'});
+  if(navigator.canShare?.({files:[file]})){
+    try{
+      await navigator.share({
+        files:[file]
+      });
+      return;
+    }catch(err){
+      if(err?.name==='AbortError')return;
+      console.error(err);
+    }
+  }
+  downloadCSV();
+  alert('目前無法直接開啟分享選單，已改為下載 BloodPressure.csv。');
+}
+
 function downloadCSV(){
   const blob=new Blob([buildCSV()],{type:'text/csv;charset=utf-8'});
   const url=URL.createObjectURL(blob),a=document.createElement('a');
@@ -134,7 +152,7 @@ function parseCSV(text){
   return rows
 }
 
-$('bpForm').onsubmit=e=>{
+$('bpForm').onsubmit=async e=>{
   e.preventDefault();
   const sys=Number($('sys').value),dia=Number($('dia').value),hr=Number($('hr').value),note=$('note').value.trim(),editId=$('editId').value;
   const records=load();
@@ -146,10 +164,15 @@ $('bpForm').onsubmit=e=>{
   }
   save(records);
   const c=classify(sys,dia);$('status').className=`status ${c.key}`;$('status').textContent=c.message;
+  const isNewRecord=!editId;
   cancelEdit();render();
+  if(isNewRecord){
+    await openICloudSave();
+  }
 };
 $('cancelEditBtn').onclick=cancelEdit;
 $('range').onchange=render;$('search').oninput=render;$('sort').onchange=render;
+$('icloudBtn').onclick=openICloudSave;
 $('exportBtn').onclick=downloadCSV;
 $('importInput').onchange=async e=>{
   const file=e.target.files[0];if(!file)return;
