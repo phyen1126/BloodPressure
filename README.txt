@@ -1,4 +1,4 @@
-BloodPressure PWA V3.1
+BloodPressure PWA V5
 
 本版修改：
 1. 匯出與 iCloud 分享的檔名固定為：
