@@ -1,25 +1,32 @@
-BloodPressure PWA V6.2
+BloodPressure PWA V7 — Google Drive 同步版
 
-新增功能：
-- 在「儲存紀錄」按鈕上方加入：
-  「儲存紀錄後自動開啟雲端儲存選單」
-- 預設為勾選。
-- 勾選時：新增紀錄後自動開啟 iOS 分享選單。
-- 取消勾選時：只儲存在目前 iPhone，不開啟分享選單。
-- 分享選單可由使用者選擇 iCloud Drive、Google Drive、OneDrive、Dropbox 或其他已安裝服務。
+重要：V7 需要你自己的 Google OAuth Client ID。
 
-保留功能：
-- 分享內容只包含 BloodPressure.csv。
-- 固定檔名 BloodPressure.csv。
-- 本機紀錄、趨勢圖、統計、搜尋、排序、編輯、刪除。
-- CSV 匯入、下載、深色模式與離線使用。
+Google Cloud 設定：
+1. 到 Google Cloud Console 建立 Project。
+2. APIs & Services → Library → 啟用 Google Drive API。
+3. OAuth consent screen：
+   - 選 External。
+   - App name 可填 BloodPressure。
+   - Testing 模式時，把你的 Google 帳號加入 Test users。
+4. Credentials → Create credentials → OAuth client ID。
+5. Application type 選 Web application。
+6. Authorized JavaScript origins 加入：
+   https://phyen1126.github.io
+7. 複製 Client ID。
+8. 編輯 config.js，把 Client ID 貼入 GOOGLE_CLIENT_ID。
 
-GitHub Pages 更新：
-1. 解壓縮 ZIP。
-2. 將全部檔案覆蓋 Repository 根目錄。
-3. 等待 GitHub Pages 重新部署。
-4. 若仍看到舊版，刪除舊主畫面 App與該網站的 Safari 網站資料，再重新加入主畫面。
+部署：
+- 將全部檔案上傳並覆蓋 GitHub Repository 根目錄。
+- 等 GitHub Pages 部署後，清除舊版網站快取並重新加入主畫面。
 
-注意：
-iOS 若目的地已有同名 BloodPressure.csv，仍可能自行建立 BloodPressure 2.csv。
-此行為由 iOS 控制，PWA 無法強制覆蓋。
+同步：
+- 第一次按「連線 Google Drive」並授權。
+- V7 使用 drive.file 權限，只管理此 App 建立或存取的檔案。
+- Google Drive 會建立或更新同一份 BloodPressure.csv。
+- 每次同步會先下載、依 record_id 合併，再上傳。
+- iPhone 與 Android 使用同一個 Google 帳號即可共用紀錄。
+
+限制：
+- 純瀏覽器 OAuth access token 會過期；過期後需再次按「連線 Google Drive」。
+- V7 目前跨裝置刪除沒有 tombstone（刪除標記），因此刪除本機資料後，遠端舊紀錄可能在下次同步回來。
