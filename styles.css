@@ -81,3 +81,7 @@ th{color:var(--muted);font-size:12px}
   .stat-card{display:flex;align-items:center;justify-content:space-between;gap:10px}
   .stat-card strong{margin-left:auto}
 }
+
+.icloud-toggle{display:flex;flex-direction:row;align-items:center;gap:9px;margin-top:14px;color:var(--muted);font-size:14px;font-weight:700}
+.icloud-toggle input{width:20px;height:20px;accent-color:var(--accent)}
+.icloud-btn{background:var(--accent)!important;color:#fff!important}

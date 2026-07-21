@@ -107,6 +107,28 @@ function drawChart(records){
     ctx.stroke();ctx.setLineDash([])
   });
 }
+
+async function shareToICloud(){
+  const filename=`BloodPressure_${new Date().toISOString().slice(0,10)}.csv`;
+  const file=new File([buildCSV()],filename,{type:'text/csv'});
+  if(navigator.canShare?.({files:[file]})){
+    try{
+      await navigator.share({
+        title:'血壓紀錄 iCloud 備份',
+        text:'請選擇「儲存到檔案」，再存到 iCloud Drive。',
+        files:[file]
+      });
+      return true;
+    }catch(err){
+      if(err?.name!=='AbortError') console.error(err);
+      return false;
+    }
+  }
+  downloadCSV();
+  alert('已下載 CSV。請在下載項目中選「分享」→「儲存到檔案」→ iCloud Drive。');
+  return false;
+}
+
 function csvEscape(v){
   const s=String(v??'');return /[",\n]/.test(s)?`"${s.replace(/"/g,'""')}"`:s
 }
@@ -145,7 +167,7 @@ function parseCSV(text){
   }
   return rows
 }
-$('bpForm').addEventListener('submit',e=>{
+$('bpForm').addEventListener('submit',async e=>{
   e.preventDefault();
   const sys=Number($('sys').value),dia=Number($('dia').value),hr=Number($('hr').value),note=$('note').value.trim(),editId=$('editId').value;
   const records=loadRecords();
@@ -157,15 +179,15 @@ $('bpForm').addEventListener('submit',e=>{
   }
   saveRecords(records);
   const c=classify(sys,dia);$('status').className=`status ${c.key}`;$('status').textContent=c.message;
-  cancelEdit();render()
+  const shouldBackup=$('autoICloud')?.checked;
+  cancelEdit();render();
+  if(shouldBackup) await shareToICloud();
 });
 $('cancelEditBtn').onclick=cancelEdit;
 $('chartRange').onchange=render;$('searchInput').oninput=render;$('sortOrder').onchange=render;
+$('icloudBtn').onclick=shareToICloud;
 $('exportBtn').onclick=downloadCSV;
-$('shareBtn').onclick=async()=>{
-  const file=new File([buildCSV()],`BloodPressure_${new Date().toISOString().slice(0,10)}.csv`,{type:'text/csv'});
-  if(navigator.canShare?.({files:[file]}))await navigator.share({title:'血壓紀錄備份',files:[file]});else downloadCSV()
-};
+$('shareBtn').onclick=shareToICloud;
 $('importInput').onchange=async e=>{
   const file=e.target.files[0];if(!file)return;
   const incoming=parseCSV(await file.text());

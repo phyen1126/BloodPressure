@@ -51,8 +51,9 @@
               <input id="note" type="text" maxlength="120" placeholder="例如：睡前、服藥後">
             </label>
           </div>
+          <label class="icloud-toggle"><input id="autoICloud" type="checkbox" checked> 每次儲存後開啟 iCloud 備份</label>
           <div class="form-actions">
-            <button id="saveBtn" class="primary" type="submit">儲存紀錄</button>
+            <button id="saveBtn" class="primary" type="submit">儲存並備份</button>
             <button id="cancelEditBtn" class="secondary hidden" type="button">取消編輯</button>
           </div>
         </form>
@@ -135,7 +136,8 @@
           <p>定期匯出 CSV 並存到 iCloud Drive，可避免清除瀏覽器資料後遺失紀錄。</p>
         </div>
         <div class="backup-actions">
-          <button id="exportBtn">匯出 CSV</button>
+          <button id="icloudBtn" class="icloud-btn">☁️ 儲存到 iCloud</button>
+          <button id="exportBtn">下載 CSV</button>
           <button id="shareBtn">分享備份</button>
           <label class="file-button">匯入 CSV
             <input id="importInput" type="file" accept=".csv,text/csv">
