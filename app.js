@@ -166,7 +166,7 @@ $('bpForm').onsubmit=async e=>{
   const c=classify(sys,dia);$('status').className=`status ${c.key}`;$('status').textContent=c.message;
   const isNewRecord=!editId;
   cancelEdit();render();
-  if(isNewRecord){
+  if(isNewRecord && $('autoCloudSave')?.checked){
     await openICloudSave();
   }
 };

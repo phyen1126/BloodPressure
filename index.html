@@ -46,8 +46,12 @@
             <input id="note" type="text" maxlength="120" placeholder="例如：睡前">
           </label>
         </div>
+        <label class="cloud-toggle">
+          <input id="autoCloudSave" type="checkbox" checked>
+          <span>儲存紀錄後自動開啟雲端儲存選單</span>
+        </label>
         <div class="form-actions">
-          <button id="saveBtn" class="primary" type="submit">儲存紀錄並開啟 iCloud</button>
+          <button id="saveBtn" class="primary" type="submit">儲存紀錄</button>
           <button id="cancelEditBtn" class="secondary hidden" type="button">取消編輯</button>
         </div>
       </form>
@@ -112,7 +116,7 @@
       <div>
         <p class="eyebrow">BACKUP</p>
         <h2>CSV 備份</h2>
-        <p>V6.1 在新增紀錄後會自動開啟分享選單。選「儲存到檔案」即可存入 iCloud Drive，分享內容只包含 <code>BloodPressure.csv</code>。</p>
+        <p>勾選「儲存紀錄後自動開啟雲端儲存選單」時，新增紀錄後會開啟 iOS 分享選單，可選 iCloud Drive、Google Drive、OneDrive 或其他雲端服務。</p>
       </div>
       <div class="backup-actions">
         <button id="icloudBtn" class="primary">儲存到 iCloud</button>
