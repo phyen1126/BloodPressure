@@ -1,5 +1,7 @@
-// 到 Google Cloud Console 建立「Web application」OAuth Client ID 後，貼在下方。
-// Authorized JavaScript origin 必須加入：https://phyen1126.github.io
-window.BP_CONFIG = {
-  GOOGLE_CLIENT_ID: '請貼上你的_GOOGLE_OAUTH_CLIENT_ID.apps.googleusercontent.com'
-};
+window.BP_CONFIG=Object.freeze({
+CLIENT_ID:"482226624163-gdvcduad8avodq5p6hb6e9m2gcrpn5h5.apps.googleusercontent.com",
+API_KEY:"AIzaSyCgF6AGv8uyuBkipFdUS3bfre_nV-6Ck5A",
+APP_ID:"482226624163",
+SCOPE:"https://www.googleapis.com/auth/drive.file",
+FILE_NAME:"BloodPressure.csv"
+});

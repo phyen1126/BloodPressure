@@ -1,91 +1,46 @@
-<!doctype html>
-<html lang="zh-Hant">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#0f172a">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="血壓紀錄">
-  <link rel="manifest" href="./manifest.webmanifest">
-  <link rel="apple-touch-icon" href="./icons/icon-192.png">
-  <link rel="stylesheet" href="./styles.css">
-  <title>BloodPressure V7</title>
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
-</head>
-<body>
-<main class="app">
-  <header>
-    <div><p class="eyebrow">Blood Pressure Logger V7</p><h1>血壓紀錄</h1></div>
-    <button id="themeBtn" class="icon-btn">◐</button>
-  </header>
+<!doctype html><html lang="zh-Hant"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0f172a"><meta name="apple-mobile-web-app-capable" content="yes">
+<title>BloodPressure V9</title><link rel="stylesheet" href="styles.css"><link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="https://apis.google.com/js/api.js" async defer></script></head><body><main>
+<header><div><small>Blood Pressure Logger V9</small><h1>血壓紀錄</h1></div><button id="theme">◐</button></header>
 
-  <section class="card drive-card">
-    <div>
-      <p class="eyebrow">GOOGLE DRIVE SYNC</p>
-      <h2>Google Drive 同步</h2>
-      <p id="driveStatus">尚未連線。請先設定 <code>config.js</code> 的 Client ID。</p>
-    </div>
-    <div class="drive-actions">
-      <button id="connectBtn" class="google-btn">連線 Google Drive</button>
-      <button id="syncBtn" class="secondary" disabled>立即同步</button>
-      <button id="disconnectBtn" class="danger hidden">中斷連線</button>
-    </div>
-    <label class="toggle"><input id="autoSync" type="checkbox" checked> 新增或修改紀錄後自動同步 Google Drive</label>
-  </section>
+<section class="card sync"><div><h2>Google Drive 同步</h2><p id="driveStatus">尚未登入 Google。</p>
+<div id="fileBox" class="file hidden"><b id="fileName"></b><small id="fileId"></small></div></div>
+<div class="buttons"><button id="login" class="primary">登入 Google</button><button id="pick" disabled>選擇既有 CSV</button>
+<button id="create" disabled>建立新 CSV</button><button id="sync" disabled>立即同步</button>
+<button id="forget" class="danger hidden">解除檔案綁定</button><button id="logout" class="danger hidden">登出</button></div>
+<label class="check"><input id="autoSync" type="checkbox" checked> 新增、編輯或刪除後自動同步</label></section>
 
-  <section class="card">
-    <div class="section-head"><div><p class="eyebrow">NEW RECORD</p><h2 id="formTitle">新增紀錄</h2></div></div>
-    <form id="form">
-      <input id="editId" type="hidden">
-      <div class="grid">
-        <label>收縮壓 SYS<input id="sys" type="number" inputmode="numeric" min="50" max="260" required placeholder="125"></label>
-        <label>舒張壓 DIA<input id="dia" type="number" inputmode="numeric" min="30" max="180" required placeholder="78"></label>
-        <label>心跳 HR<input id="hr" type="number" inputmode="numeric" min="30" max="220" required placeholder="69"></label>
-        <label>備註<input id="note" type="text" maxlength="120" placeholder="例如：睡前"></label>
-      </div>
-      <div class="form-actions">
-        <button id="saveBtn" class="primary" type="submit">儲存紀錄</button>
-        <button id="cancelBtn" class="secondary hidden" type="button">取消編輯</button>
-      </div>
-    </form>
-    <div id="status" class="status hidden"></div>
-  </section>
+<section class="card"><h2 id="formTitle">新增紀錄</h2><form id="form"><input id="editId" type="hidden">
+<div class="grid"><label>日期<input id="date" type="date" required></label><label>時間<input id="time" type="time" required></label>
+<label>收縮壓 SYS<input id="sys" type="number" min="50" max="260" required></label>
+<label>舒張壓 DIA<input id="dia" type="number" min="30" max="180" required></label>
+<label>心跳 HR<input id="hr" type="number" min="30" max="220" required></label>
+<label>備註<input id="note" maxlength="120"></label></div>
+<div class="quick"><button type="button" data-note="起床">起床</button><button type="button" data-note="飯後">飯後</button>
+<button type="button" data-note="睡前">睡前</button><button type="button" data-note="運動後">運動後</button><button type="button" data-note="服藥後">服藥後</button></div>
+<div class="formButtons"><button class="primary" id="save">儲存紀錄</button><button type="button" id="cancel" class="hidden">取消編輯</button></div></form>
+<div id="status" class="status hidden"></div></section>
 
-  <section class="stats">
-    <article><span>最近血壓</span><strong id="latest">—</strong><small id="latestTime">尚無紀錄</small></article>
-    <article><span>平均血壓</span><strong id="average">—</strong><small id="avgHr">平均心跳 —</small></article>
-    <article><span>紀錄筆數</span><strong id="count">0</strong><small id="monthCount">本月 0 筆</small></article>
-    <article><span>最近狀態</span><strong id="latestState">—</strong><small>僅供個人紀錄</small></article>
-  </section>
+<section class="stats"><article><span>最近血壓</span><b id="latest">—</b><small id="latestTime">尚無紀錄</small></article>
+<article><span>平均血壓</span><b id="average">—</b><small id="avgHr">平均心跳 —</small></article>
+<article><span>紀錄筆數</span><b id="count">0</b><small id="month">本月 0 筆</small></article>
+<article><span>最近狀態</span><b id="state">—</b><small>僅供個人紀錄</small></article></section>
 
-  <section class="card">
-    <div class="section-head"><div><p class="eyebrow">TREND</p><h2>趨勢圖</h2></div>
-      <select id="range"><option value="7">最近 7 筆</option><option value="14">最近 14 筆</option><option value="30">最近 30 筆</option><option value="9999">全部</option></select>
-    </div>
-    <canvas id="chart" width="900" height="360"></canvas>
-    <div class="legend"><span><i class="dot sys"></i>收縮壓</span><span><i class="dot dia"></i>舒張壓</span><span><i class="dot hr"></i>心跳</span></div>
-  </section>
+<section class="card"><div class="head"><h2>趨勢圖</h2><select id="range"><option value="7">最近 7 筆</option><option value="14">最近 14 筆</option><option value="30">最近 30 筆</option><option value="9999">全部</option></select></div>
+<canvas id="chart" width="900" height="360"></canvas></section>
 
-  <section class="card">
-    <div class="section-head history-head">
-      <div><p class="eyebrow">HISTORY</p><h2>歷史紀錄</h2></div>
-      <div class="filters"><input id="search" type="search" placeholder="搜尋日期、數值或備註"><select id="sort"><option value="desc">最新優先</option><option value="asc">最舊優先</option></select></div>
-    </div>
-    <div id="empty" class="empty">尚無紀錄</div>
-    <div class="table-wrap"><table id="history" class="hidden"><thead><tr><th>日期時間</th><th>血壓</th><th>心跳</th><th>狀態</th><th>備註</th><th>操作</th></tr></thead><tbody></tbody></table></div>
-  </section>
+<section class="card"><div class="head"><h2>歷史紀錄</h2><div class="tools"><input id="search" placeholder="搜尋日期、數值或備註">
+<select id="sort"><option value="desc">最新優先</option><option value="asc">最舊優先</option></select></div></div>
+<div id="empty">尚無紀錄</div><div class="table"><table id="history" class="hidden"><thead><tr><th>日期時間</th><th>血壓</th><th>心跳</th><th>狀態</th><th>備註</th><th>操作</th></tr></thead><tbody></tbody></table></div></section>
 
-  <section class="card backup">
-    <div><p class="eyebrow">BACKUP</p><h2>本機備份</h2><p>Google Drive 檔名固定為 <code>BloodPressure.csv</code>。也可以手動匯出或匯入 CSV。</p></div>
-    <div class="backup-actions">
-      <button id="exportBtn" class="secondary">下載 CSV</button>
-      <label class="file-btn">匯入 CSV<input id="importInput" type="file" accept=".csv,text/csv"></label>
-      <button id="clearBtn" class="danger">清除本機紀錄</button>
-    </div>
-  </section>
-
-  <section class="note"><strong>同步方式：</strong>每次同步會先下載 Google Drive 上的資料，依紀錄 ID 合併，再更新同一份 <code>BloodPressure.csv</code>，讓 iPhone 與 Android 共用資料。</section>
-</main>
-<script src="./config.js"></script>
-<script src="./app.js"></script>
-</body></html>
+<section class="card backup"><div><h2>本機備份</h2><p>Google Drive 會持續更新同一個 fileId；本機亦可匯出與匯入。</p></div>
+<div class="buttons"><button id="export">下載 CSV</button><label class="upload">匯入 CSV<input id="import" type="file" accept=".csv,text/csv"></label>
+<button id="clear" class="danger">清除本機快取</button></div></section>
+<p class="notice">本工具只供個人紀錄，不取代醫療診斷。Google 授權到期後需再次登入。</p>
+</main><dialog id="first"><div class="dialog"><h2>選擇同步方式</h2><p>選擇既有 CSV，或在自己的 Google Drive 建立新檔案。</p>
+<button id="dPick">選擇既有 CSV</button><button id="dCreate" class="primary">建立新 CSV</button><button onclick="first.close()">稍後再說</button></div></dialog>
+<script src="config.js"></script><script src="app.js"></script></body></html>
