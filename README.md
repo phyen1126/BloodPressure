@@ -1,3 +1,17 @@
+# BloodPressure V9.3
+
+新增全新 iOS 風格心電圖＋血滴 App Icon，支援 iPhone、Android、Windows PWA 與瀏覽器 favicon。
+
+更新 GitHub 後，請刪除舊主畫面 App、清除該網站資料，再重新加入主畫面，才會看到新圖示。
+
+# BloodPressure V9.2
+
+修正 Google 登入與 CSV 匯入造成整份 JavaScript 無法載入的語法錯誤。
+
+# BloodPressure V9.1
+
+修正 V9 的 JavaScript 語法錯誤，並加入 Google OAuth 彈窗錯誤提示。
+
 # BloodPressure V9
 
 ## 部署
