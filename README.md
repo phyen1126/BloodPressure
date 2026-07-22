@@ -1,3 +1,17 @@
+# BloodPressure V10.1
+
+本版更新：
+
+- 開啟 App 時更新目前日期與時間。
+- 從背景回到前景時更新時間。
+- 編輯既有紀錄時保留原日期時間。
+- 使用者已開始輸入時，不會突然覆蓋日期時間。
+- 保留已綁定的 Google Drive fileId。
+- 啟動時嘗試用既有 Google Session 恢復授權並自動同步。
+- 若瀏覽器不允許無互動恢復，按鈕會顯示「重新連線 Google」，不需重新選 CSV。
+
+注意：純前端 PWA 無法永久保存 Google Access Token；Safari/Chrome 是否允許無感恢復，仍由 Google Session、Cookie 與瀏覽器彈窗政策決定。
+
 # BloodPressure V10
 
 `BloodPressure.csv` 現在只包含：
