@@ -1,3 +1,7 @@
+# BloodPressure V9.4
+
+未登入只顯示登入按鈕；登入後依是否綁定 CSV 顯示必要操作；同步期間鎖定操作。
+
 # BloodPressure V9.3
 
 新增全新 iOS 風格心電圖＋血滴 App Icon，支援 iPhone、Android、Windows PWA 與瀏覽器 favicon。

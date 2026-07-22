@@ -10,7 +10,24 @@ function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&l
 function fmt(t){return new Intl.DateTimeFormat("zh-TW",{year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",hour12:false}).format(new Date(t))}
 function cls(s,d){if(s>=180||d>=120)return["bad","非常高","⚠️ 數值非常高；如有不適請立即就醫。"];if(s>=140||d>=90)return["warn","偏高","⚠️ 血壓偏高，建議休息後重測。"];if(s<90||d<60)return["warn","偏低","⚠️ 血壓偏低；如有不適請諮詢醫師。"];if(s>=130||d>=80)return["warn","稍高","ℹ️ 數值稍高，已完成紀錄。"];return["ok","一般範圍","✅ 紀錄已儲存。"]}
 function driveMsg(m,bad=false){$("driveStatus").textContent=m;$("driveStatus").style.color=bad?"var(--danger)":""}
-function ui(){let f=fileId();$("pick").disabled=!token||!pickerReady;$("create").disabled=!token;$("sync").disabled=!token||!f;$("forget").classList.toggle("hidden",!f);$("logout").classList.toggle("hidden",!token);$("fileBox").classList.toggle("hidden",!f);$("fileName").textContent=fileName()||C.FILE_NAME;$("fileId").textContent=f?"fileId: "+f:""}
+function ui(){const f=fileId(),signedIn=Boolean(token)&&Date.now()<expires,hasFile=Boolean(f),busy=syncing;
+$("login").classList.toggle("hidden",signedIn);
+$("pick").classList.toggle("hidden",!signedIn);
+$("create").classList.toggle("hidden",!signedIn||hasFile);
+$("sync").classList.toggle("hidden",!signedIn||!hasFile);
+$("forget").classList.toggle("hidden",!signedIn||!hasFile);
+$("logout").classList.toggle("hidden",!signedIn);
+$("autoSyncRow").classList.toggle("hidden",!signedIn||!hasFile);
+$("fileBox").classList.toggle("hidden",!signedIn||!hasFile);
+$("pick").textContent=hasFile?"更換同步檔案":"選擇既有 CSV";
+$("pick").disabled=!signedIn||!pickerReady||busy;
+$("create").disabled=!signedIn||busy;
+$("sync").disabled=!signedIn||!hasFile||busy;
+$("forget").disabled=busy;$("logout").disabled=busy;$("login").disabled=busy;
+$("fileName").textContent=fileName()||C.FILE_NAME;
+$("fileId").textContent=f?"已綁定固定 Google Drive 檔案":"";
+const badge=$("connectionBadge");badge.className="connection-badge "+(busy?"syncing":signedIn?"signed-in":"signed-out");badge.textContent=busy?"同步中":signedIn?"已登入":"未登入";
+if(!signedIn)driveMsg("尚未登入 Google。");else if(!hasFile)driveMsg("已登入 Google，請選擇既有 CSV 或建立新 CSV。")}
 function defaults(){let d=new Date(),l=new Date(d-d.getTimezoneOffset()*60000);$("date").value=l.toISOString().slice(0,10);$("time").value=l.toISOString().slice(11,16)}
 function initGoogle(){if(!window.google?.accounts?.oauth2||!window.gapi){setTimeout(initGoogle,250);return}gapi.load("picker",{callback:()=>{pickerReady=true;ui()}});client=google.accounts.oauth2.initTokenClient({client_id:C.CLIENT_ID,scope:C.SCOPE,callback:()=>{},error_callback:e=>{let type=e?.type||"unknown";if(type==="popup_failed_to_open")driveMsg("Google 登入視窗無法開啟。請允許彈出式視窗，或先用 Safari/Chrome 開啟網站再登入。",true);else if(type==="popup_closed")driveMsg("Google 登入視窗已關閉，尚未完成授權。",true);else driveMsg("Google 登入發生錯誤："+type,true)}})}
 function auth(interactive=true){return new Promise((res,rej)=>{if(token&&Date.now()<expires)return res(token);if(!client)return rej(Error("Google 元件尚未載入"));client.callback=r=>{if(r.error)return rej(Error(r.error_description||r.error));token=r.access_token;expires=Date.now()+(Number(r.expires_in||3600)-60)*1000;driveMsg("Google Drive 已登入。");ui();res(token)};client.requestAccessToken({prompt:interactive?"consent":""})})}
@@ -21,7 +38,7 @@ function csv(records=load()){let a=[["record_id","timestamp_iso","updated_at_iso
 function parse(text){let lines=text.replace(/^\ufeff/,"").split(/\r?\n/).filter(Boolean),out=[];for(let line of lines.slice(1)){let c=[],x="",q=false;for(let i=0;i<line.length;i++){let ch=line[i];if(ch=='"'&&line[i+1]=='"'){x+='"';i++}else if(ch=='"')q=!q;else if(ch==","&&!q){c.push(x);x=""}else x+=ch}c.push(x);if(c.length>=10&&c[0]&&!isNaN(Date.parse(c[1])))out.push({id:c[0],time:new Date(c[1]).toISOString(),updatedAt:!isNaN(Date.parse(c[2]))?new Date(c[2]).toISOString():c[1],deleted:c[3]=="1"||c[3]=="true",sys:+c[6],dia:+c[7],hr:+c[8],note:c[9]||""});else if(c.length>=5){let d=new Date(c[0]+" "+c[1]);if(!isNaN(d))out.push({id:uid(),time:d.toISOString(),updatedAt:now(),deleted:false,sys:+c[2],dia:+c[3],hr:+c[4],note:c.length>=7?c[6]||"":c[5]||""})}}return out.filter(r=>[r.sys,r.dia,r.hr].every(Number.isFinite))}
 function merge(a,b){let m=new Map;[...b,...a].forEach(r=>{let e=m.get(r.id);if(!e||Date.parse(r.updatedAt||r.time)>=Date.parse(e.updatedAt||e.time))m.set(r.id,r)});return[...m.values()].sort((x,y)=>new Date(x.time)-new Date(y.time))}
 async function createFile(){await auth(false);let boundary="bp9_"+Date.now(),meta={name:C.FILE_NAME,mimeType:"text/csv",description:"BloodPressure PWA V9 sync file",appProperties:{app:"BloodPressurePWA",version:"9"}},body=`--${boundary}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n${JSON.stringify(meta)}\r\n--${boundary}\r\nContent-Type: text/csv; charset=UTF-8\r\n\r\n${csv()}\r\n--${boundary}--`;let r=await api("https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,name",{method:"POST",headers:{"Content-Type":"multipart/related; boundary="+boundary},body}),f=await r.json();setFile(f.id,f.name);await syncDrive()}
-async function syncDrive(){if(syncing)return;let id=fileId();if(!id)return driveMsg("請先選擇或建立同步檔案。",true);syncing=true;ui();driveMsg("正在同步…");try{let r=await api(`https://www.googleapis.com/drive/v3/files/${encodeURIComponent(id)}?alt=media`),remote=parse(await r.text()),all=merge(load(),remote);save(all);await api(`https://www.googleapis.com/upload/drive/v3/files/${encodeURIComponent(id)}?uploadType=media`,{method:"PATCH",headers:{"Content-Type":"text/csv; charset=UTF-8"},body:csv(all)});render();driveMsg(`同步完成，共 ${all.filter(x=>!x.deleted).length} 筆。`)}finally{syncing=false;ui()}}
+async function syncDrive(){if(syncing)return;let id=fileId();if(!id)return driveMsg("請先選擇或建立同步檔案。",true);syncing=true;ui();driveMsg("正在同步 Google Drive，請稍候…");try{let r=await api(`https://www.googleapis.com/drive/v3/files/${encodeURIComponent(id)}?alt=media`),remote=parse(await r.text()),all=merge(load(),remote);save(all);await api(`https://www.googleapis.com/upload/drive/v3/files/${encodeURIComponent(id)}?uploadType=media`,{method:"PATCH",headers:{"Content-Type":"text/csv; charset=UTF-8"},body:csv(all)});render();driveMsg(`同步完成，共 ${all.filter(x=>!x.deleted).length} 筆。`)}finally{syncing=false;ui()}}
 function syncError(e){console.error(e);let m=String(e.message||e);if(m.includes("404")){clearFile();driveMsg("找不到同步檔案，請重新選擇。",true)}else if(m.includes("401")){token="";expires=0;ui();driveMsg("授權已到期，請重新登入。",true)}else driveMsg("同步失敗："+m,true)}
 async function auto(){if(!$("autoSync").checked||!fileId())return;if(!token||Date.now()>=expires)return driveMsg("已存本機；請重新登入後同步。",true);try{await syncDrive()}catch(e){syncError(e)}}
 function active(){return load().filter(r=>!r.deleted)}
