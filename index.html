@@ -1,21 +1,16 @@
 <!doctype html><html lang="zh-Hant"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0f172a"><meta name="apple-mobile-web-app-capable" content="yes">
-<title>Blood Pressure Logger V9.4</title><link rel="stylesheet" href="styles.css"><link rel="manifest" href="manifest.webmanifest">
+<title>Blood Pressure Logger V9.5</title><link rel="stylesheet" href="styles.css"><link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16.png">
 <link rel="shortcut icon" href="favicon.ico">
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script src="https://apis.google.com/js/api.js" async defer></script></head><body><main>
-<header><div><small>Blood Pressure Logger V9.4</small><h1>血壓紀錄</h1></div><button id="theme">◐</button></header>
+<header><div><small>Blood Pressure Logger V9.5</small><h1>血壓紀錄</h1></div><button id="theme">◐</button></header>
 
-<section class="card sync"><div><div class="sync-title-row"><h2>Google Drive 同步</h2><span id="connectionBadge" class="connection-badge signed-out">未登入</span></div><p id="driveStatus">尚未登入 Google。</p>
-<div id="fileBox" class="file hidden"><b id="fileName"></b><small id="fileId"></small></div></div>
-<div id="driveButtons" class="buttons"><button id="login" class="primary">登入 Google</button><button id="pick" class="hidden" disabled>選擇既有 CSV</button>
-<button id="create" class="hidden" disabled>建立新 CSV</button><button id="sync" class="hidden" disabled>立即同步</button>
-<button id="forget" class="danger hidden">解除檔案綁定</button><button id="logout" class="danger hidden">登出</button></div>
-<label id="autoSyncRow" class="check hidden"><input id="autoSync" type="checkbox" checked> 新增、編輯或刪除後自動同步</label></section>
+<section id="driveStatusCard" class="card sync"><div><div class="sync-title-row"><h2>Google Drive 同步</h2><span id="connectionBadge" class="connection-badge signed-out">未登入</span></div><p id="driveStatus">尚未登入 Google。</p><div id="fileBox" class="file hidden"><b id="fileName"></b><small id="fileId"></small><small id="lastSyncTime">尚未同步</small></div></div><div id="topLoginArea" class="buttons"><button id="login" class="primary">登入 Google</button></div></section>
 
 <section class="card"><h2 id="formTitle">新增紀錄</h2><form id="form"><input id="editId" type="hidden">
 <div class="grid"><label>日期<input id="date" type="date" required></label><label>時間<input id="time" type="time" required></label>
@@ -40,10 +35,11 @@
 <select id="sort"><option value="desc">最新優先</option><option value="asc">最舊優先</option></select></div></div>
 <div id="empty">尚無紀錄</div><div class="table"><table id="history" class="hidden"><thead><tr><th>日期時間</th><th>血壓</th><th>心跳</th><th>狀態</th><th>備註</th><th>操作</th></tr></thead><tbody></tbody></table></div></section>
 
+<section id="driveManageSection" class="card hidden"><details id="driveManage"><summary>Google Drive 管理</summary><div class="drive-manage-body"><div class="buttons"><button id="pick">選擇既有 CSV</button><button id="create">建立新 CSV</button><button id="sync">立即同步</button><button id="forget" class="danger">解除檔案綁定</button><button id="logout" class="danger">登出 Google</button></div><label id="autoSyncRow" class="check"><input id="autoSync" type="checkbox" checked> 新增、編輯或刪除後自動同步</label></div></details></section>
 <section class="card backup"><div><h2>本機備份</h2><p>Google Drive 會持續更新同一個 fileId；本機亦可匯出與匯入。</p></div>
 <div class="buttons"><button id="export">下載 CSV</button><label class="upload">匯入 CSV<input id="import" type="file" accept=".csv,text/csv"></label>
 <button id="clear" class="danger">清除本機快取</button></div></section>
 <p class="notice">本工具只供個人紀錄，不取代醫療診斷。Google 授權到期後需再次登入。</p>
 </main><dialog id="first"><div class="dialog"><h2>選擇同步方式</h2><p>選擇既有 CSV，或在自己的 Google Drive 建立新檔案。</p>
 <button id="dPick">選擇既有 CSV</button><button id="dCreate" class="primary">建立新 CSV</button><button onclick="first.close()">稍後再說</button></div></dialog>
-<script src="config.js"></script><script src="app.js"></script></body></html>
+<div id="toast" class="toast hidden" role="status" aria-live="polite"></div><script src="config.js"></script><script src="app.js"></script></body></html>
