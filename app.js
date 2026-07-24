@@ -123,4 +123,14 @@ document.addEventListener("visibilitychange",()=>{
 window.addEventListener("pageshow",()=>defaults(false));
 window.addEventListener("focus",()=>defaults(false));
 document.documentElement.dataset.theme=localStorage.getItem(TK)||localStorage.getItem("bp10_theme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");
-saveUpgradeSnapshot();defaults(true);render();window.addEventListener("online",()=>{updatePendingUi();if(pendingIds().length&&token&&fileId())syncDrive().catch(syncError)});window.addEventListener("offline",()=>driveMsg("目前離線，變更會先保存在本機。",true));window.addEventListener("load",initGoogle);if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js");
+saveUpgradeSnapshot();defaults(true);render();
+const ABOUT_OPEN_KEY="bp11_about_open";
+const aboutSection=$("aboutBloodPressure");
+if(aboutSection){
+  const savedAboutState=localStorage.getItem(ABOUT_OPEN_KEY);
+  if(savedAboutState!==null)aboutSection.open=savedAboutState==="1";
+  aboutSection.addEventListener("toggle",()=>{
+    localStorage.setItem(ABOUT_OPEN_KEY,aboutSection.open?"1":"0");
+  });
+}
+window.addEventListener("online",()=>{updatePendingUi();if(pendingIds().length&&token&&fileId())syncDrive().catch(syncError)});window.addEventListener("offline",()=>driveMsg("目前離線，變更會先保存在本機。",true));window.addEventListener("load",initGoogle);if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js");

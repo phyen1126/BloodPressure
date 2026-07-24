@@ -77,3 +77,14 @@ header,.head{display:flex;justify-content:space-between;align-items:center;gap:1
 }
 
 .history-filter-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.history-filter-actions{display:flex;justify-content:flex-end;margin-top:12px}#pendingSyncLabel{margin-top:5px}.pending-warning{color:var(--warn)!important;font-weight:800}@media(max-width:620px){.history-filter-grid{grid-template-columns:1fr}.history-filter-actions button{width:100%}}
+
+.about-details{padding:0;overflow:hidden}
+.about-details summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 20px;font-size:21px;font-weight:800}
+.about-details summary::-webkit-details-marker{display:none}
+.about-details summary::after{content:"⌄";margin-left:4px;color:var(--muted);font-size:20px;transition:transform .2s ease}
+.about-details[open] summary::after{transform:rotate(180deg)}
+.about-details summary small{margin-left:auto;color:var(--muted);font-size:12px;font-weight:700}
+.about-details-body{padding:0 20px 20px;border-top:1px solid var(--line)}
+.about-details-body p{line-height:1.75;margin:14px 0}
+.about-details-body code{padding:2px 6px;border-radius:6px;background:var(--sub);color:var(--text)}
+@media(max-width:620px){.about-details summary small{display:none}}

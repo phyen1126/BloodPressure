@@ -1,3 +1,12 @@
+# BloodPressure V11.1
+
+- 版本號只顯示於頁面最底部。
+- 「關於 BloodPressure」移至 Google Drive 區塊前方。
+- About 區塊預設展開並可收合。
+- 收合狀態會保存在目前裝置。
+- 首頁上半部直接顯示 App 用途、Google Drive 資料用途與醫療免責聲明。
+- 保留 V11 的離線待同步、多裝置合併、日期／狀態篩選與 JSON 備份。
+
 # BloodPressure V11
 
 - 離線待同步狀態與恢復網路後同步
