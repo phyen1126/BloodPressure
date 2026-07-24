@@ -21,7 +21,7 @@
     <small>個人血壓紀錄與 Google Drive 同步</small>
     <h1>BloodPressure</h1>
     <p class="app-subtitle">血壓紀錄</p>
-    <small class="version-label">Version 10.3</small>
+    <small class="version-label">Version 10.4</small>
   </div>
   <button id="theme" aria-label="切換深色模式">◐</button>
 </header>
@@ -53,10 +53,12 @@
   <div class="tools"><input id="search" placeholder="搜尋日期、數值或備註">
   <select id="sort"><option value="desc">最新優先</option><option value="asc">最舊優先</option></select></div>
 </div>
-<div id="empty">尚無紀錄</div>
-<div class="table"><table id="history" class="hidden"><thead><tr><th>日期時間</th><th>血壓</th><th>心跳</th><th>狀態</th><th>備註</th><th>操作</th></tr></thead><tbody></tbody></table></div>
-<details id="historyManage" class="history-manage">
-  <summary>歷史紀錄顯示設定</summary>
+
+<details id="historyManage" class="history-manage history-manage-top">
+  <summary>
+    <span>顯示設定</span>
+    <small id="historySummaryLabel">10 筆</small>
+  </summary>
   <div class="history-manage-body">
     <label>每批顯示筆數
       <select id="historyPageSize">
@@ -72,6 +74,9 @@
     </div>
   </div>
 </details>
+
+<div id="empty">尚無紀錄</div>
+<div class="table"><table id="history" class="hidden"><thead><tr><th>日期時間</th><th>血壓</th><th>心跳</th><th>狀態</th><th>備註</th><th>操作</th></tr></thead><tbody></tbody></table></div>
 </section>
 
 <section id="driveManageSection" class="card hidden"><details id="driveManage"><summary>Google Drive 管理</summary><div class="drive-manage-body"><div class="buttons"><button id="pick">選擇既有 CSV</button><button id="create">建立新 CSV</button><button id="sync">立即同步</button><button id="forget" class="danger">解除檔案綁定</button><button id="logout" class="danger">登出 Google</button></div><label id="autoSyncRow" class="check"><input id="autoSync" type="checkbox" checked> 新增、編輯或刪除後自動同步</label></div></details></section>
@@ -107,7 +112,7 @@
     <span aria-hidden="true"> · </span>
     <a href="./terms.html">服務條款</a>
   </p>
-  <small>BloodPressure · Version 10.3</small>
+  <small>BloodPressure · Version 10.4</small>
 </footer>
 </main><dialog id="first"><div class="dialog"><h2>選擇同步方式</h2><p>選擇既有 CSV，或在自己的 Google Drive 建立新檔案。</p>
 <button id="dPick">選擇既有 CSV</button><button id="dCreate" class="primary">建立新 CSV</button><button onclick="first.close()">稍後再說</button></div></dialog>

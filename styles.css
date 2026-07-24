@@ -52,3 +52,26 @@ header,.head{display:flex;justify-content:space-between;align-items:center;gap:1
 .history-page-info{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:12px;color:var(--muted)}
 #historyCountLabel{display:block;margin-top:3px;color:var(--muted)}
 @media(max-width:620px){.history-page-info{align-items:stretch;flex-direction:column}#loadMoreHistory{width:100%}}
+
+.history-manage-top{margin:14px 0 16px}
+.history-manage-top summary{
+  gap:10px;
+  background:var(--sub);
+  border-radius:13px
+}
+.history-manage-top[open] summary{
+  border-bottom-left-radius:0;
+  border-bottom-right-radius:0
+}
+.history-manage-top summary span{font-weight:800}
+.history-manage-top summary small{
+  margin-left:auto;
+  margin-right:8px;
+  color:var(--muted);
+  font-weight:700
+}
+.history-manage-top .history-manage-body{
+  background:var(--card);
+  border-bottom-left-radius:13px;
+  border-bottom-right-radius:13px
+}
