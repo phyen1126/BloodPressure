@@ -88,3 +88,14 @@ header,.head{display:flex;justify-content:space-between;align-items:center;gap:1
 .about-details-body p{line-height:1.75;margin:14px 0}
 .about-details-body code{padding:2px 6px;border-radius:6px;background:var(--sub);color:var(--text)}
 @media(max-width:620px){.about-details summary small{display:none}}
+
+.collapsible-section{padding:0;overflow:hidden}
+.collapsible-section>summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 20px}
+.collapsible-section>summary::-webkit-details-marker{display:none}
+.collapsible-section>summary::after{content:"⌄";color:var(--muted);font-size:20px;transition:transform .2s ease}
+.collapsible-section[open]>summary::after{transform:rotate(180deg)}
+.collapsible-section .section-title{display:block;font-size:22px;font-weight:800}
+.collapsible-section>summary small{color:var(--muted)}
+.collapsible-section-body{border-top:1px solid var(--line);padding:16px 20px 20px}
+.history-tools{margin-bottom:14px;display:flex;gap:10px;flex-wrap:wrap}
+@media(max-width:620px){.section-state-label{display:none}.history-tools{display:grid}}

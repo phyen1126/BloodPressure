@@ -124,6 +124,22 @@ window.addEventListener("pageshow",()=>defaults(false));
 window.addEventListener("focus",()=>defaults(false));
 document.documentElement.dataset.theme=localStorage.getItem(TK)||localStorage.getItem("bp10_theme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");
 saveUpgradeSnapshot();defaults(true);render();
+const HISTORY_OPEN_KEY="bp11_history_open";
+const historySection=$("historySection");
+if(historySection){
+  const savedHistoryState=localStorage.getItem(HISTORY_OPEN_KEY);
+  historySection.open=savedHistoryState==="1";
+  const updateHistoryStateLabel=()=>{
+    const label=historySection.querySelector(".section-state-label");
+    if(label)label.textContent=historySection.open?"點擊收合":"點擊展開";
+  };
+  updateHistoryStateLabel();
+  historySection.addEventListener("toggle",()=>{
+    localStorage.setItem(HISTORY_OPEN_KEY,historySection.open?"1":"0");
+    updateHistoryStateLabel();
+  });
+}
+
 const ABOUT_OPEN_KEY="bp11_about_open";
 const aboutSection=$("aboutBloodPressure");
 if(aboutSection){
