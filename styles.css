@@ -99,3 +99,6 @@ header,.head{display:flex;justify-content:space-between;align-items:center;gap:1
 .collapsible-section-body{border-top:1px solid var(--line);padding:16px 20px 20px}
 .history-tools{margin-bottom:14px;display:flex;gap:10px;flex-wrap:wrap}
 @media(max-width:620px){.section-state-label{display:none}.history-tools{display:grid}}
+
+#historySectionTitle{font-size:22px;font-weight:800}
+#localBackupSection .collapsible-section-body .buttons{margin-top:0}

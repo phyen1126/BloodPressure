@@ -76,7 +76,7 @@
 <details id="historySection" class="card collapsible-section">
 <summary>
   <div>
-    <span class="section-title">歷史紀錄</span>
+    <span id="historySectionTitle" class="section-title">歷史紀錄（0/0）</span>
     <small id="historyCountLabel">共 0 筆</small>
   </div>
   <small class="section-state-label">點擊展開</small>
@@ -112,8 +112,19 @@
 
 
 <section id="driveManageSection" class="card hidden"><details id="driveManage"><summary>Google Drive 管理</summary><div class="drive-manage-body"><div class="buttons"><button id="pick">選擇既有 CSV</button><button id="create">建立新 CSV</button><button id="sync">立即同步</button><button id="forget" class="danger">解除檔案綁定</button><button id="logout" class="danger">登出 Google</button></div><label id="autoSyncRow" class="check"><input id="autoSync" type="checkbox" checked> 新增、編輯或刪除後自動同步</label></div></details></section>
-<section class="card backup"><div><h2>本機備份</h2><p>BloodPressure.csv 只顯示日期、時間、血壓、心跳與備註；同步資料另存系統檔。</p></div>
-<div class="buttons"><button id="export">下載 CSV</button><label class="upload">匯入 CSV<input id="import" type="file" accept=".csv,text/csv"></label><button id="exportJson">完整 JSON 備份</button><label class="upload">復原 JSON<input id="importJson" type="file" accept=".json,application/json"></label><button id="clear" class="danger">清除本機快取</button></div></section>
+<details id="localBackupSection" class="card collapsible-section">
+<summary>
+  <div>
+    <span class="section-title">本機備份</span>
+    <small>CSV／JSON 匯出與復原</small>
+  </div>
+  <small class="section-state-label">點擊展開</small>
+</summary>
+<div class="collapsible-section-body">
+<div><h2>本機備份</h2><p>BloodPressure.csv 只顯示日期、時間、血壓、心跳與備註；同步資料另存系統檔。</p></div>
+<div class="buttons"><button id="export">下載 CSV</button><label class="upload">匯入 CSV<input id="import" type="file" accept=".csv,text/csv"></label><button id="exportJson">完整 JSON 備份</button><label class="upload">復原 JSON<input id="importJson" type="file" accept=".json,application/json"></label><button id="clear" class="danger">清除本機快取</button></div>
+</div>
+</details>
 <footer class="site-footer">
   <p>BloodPressure 只供個人紀錄，不取代醫療診斷。Google 授權到期後可能需要重新連線。</p>
   <p>
@@ -121,7 +132,7 @@
     <span aria-hidden="true"> · </span>
     <a href="./terms.html">服務條款</a>
   </p>
-  <small>BloodPressure · Version 11.2</small>
+  <small>BloodPressure · Version 11.2.1</small>
 </footer>
 </main><dialog id="first"><div class="dialog"><h2>選擇同步方式</h2><p>選擇既有 CSV，或在自己的 Google Drive 建立新檔案。</p>
 <button id="dPick">選擇既有 CSV</button><button id="dCreate" class="primary">建立新 CSV</button><button onclick="first.close()">稍後再說</button></div></dialog>
