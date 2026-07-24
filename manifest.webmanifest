@@ -1,6 +1,6 @@
 {
-  "name": "Blood Pressure Logger V10.1",
-  "short_name": "血壓紀錄",
+  "name": "BloodPressure",
+  "short_name": "BloodPressure",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
@@ -25,5 +25,6 @@
       "type": "image/png",
       "purpose": "maskable"
     }
-  ]
+  ],
+  "description": "個人血壓、心跳與備註紀錄，並可由使用者授權同步至自己的 Google Drive。"
 }

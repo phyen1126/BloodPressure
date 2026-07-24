@@ -1,0 +1,40 @@
+BloodPressure — Google OAuth 驗證部署說明
+================================================
+
+請將此 ZIP 內所有檔案覆蓋到 GitHub Repository 的根目錄。
+
+OAuth 品牌欄位請填：
+
+應用程式名稱：
+BloodPressure
+
+首頁：
+https://phyen1126.github.io/BloodPressure/
+
+隱私權政策：
+https://phyen1126.github.io/BloodPressure/privacy.html
+
+服務條款：
+https://phyen1126.github.io/BloodPressure/terms.html
+
+
+Search Console 網站擁有權驗證
+--------------------------------
+
+1. 使用 Google Cloud 專案 Owner／Editor 的同一個 Google 帳戶登入 Search Console。
+2. 新增「網址前置字元」資源：
+   https://phyen1126.github.io/BloodPressure/
+3. 選擇 HTML 標記驗證。
+4. Google 會提供類似：
+
+   <meta name="google-site-verification" content="專屬驗證碼">
+
+5. 開啟 index.html，在 <head> 中找到 GOOGLE SEARCH CONSOLE 註解。
+6. 將 Google 提供的完整 meta 標記貼在該註解下方。
+7. 上傳修改後的 index.html 到 GitHub。
+8. 等 GitHub Pages 部署完成後，回 Search Console 按「驗證」。
+
+注意：
+- 驗證標記是你的帳戶與網站專屬資料，本套件無法預先代填。
+- 驗證成功後不要刪除該 meta 標記。
+- 用無痕視窗確認首頁、privacy.html、terms.html 都可公開開啟。

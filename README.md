@@ -1,3 +1,17 @@
+# BloodPressure V10.2 — OAuth Verification Edition
+
+此版本針對 Google OAuth 品牌驗證調整：
+
+- 首頁正式名稱統一為 `BloodPressure`
+- 首頁公開說明應用程式用途
+- 公開說明 Google Drive 資料用途
+- 新增 `privacy.html`
+- 新增 `terms.html`
+- Manifest、頁面標題及 iPhone App 名稱保持一致
+- 預留 Search Console 驗證標記位置
+
+請閱讀 `GOOGLE_OAUTH_VERIFICATION_SETUP.txt`。
+
 # BloodPressure V10.1
 
 本版更新：
