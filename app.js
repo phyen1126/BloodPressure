@@ -160,7 +160,7 @@ const ABOUT_OPEN_KEY="bp11_about_open";
 const aboutSection=$("aboutBloodPressure");
 if(aboutSection){
   const savedAboutState=localStorage.getItem(ABOUT_OPEN_KEY);
-  if(savedAboutState!==null)aboutSection.open=savedAboutState==="1";
+  if(savedAboutState===null){aboutSection.open=false;}else{aboutSection.open=savedAboutState==="1";}
   aboutSection.addEventListener("toggle",()=>{
     localStorage.setItem(ABOUT_OPEN_KEY,aboutSection.open?"1":"0");
   });
