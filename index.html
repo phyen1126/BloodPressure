@@ -5,7 +5,6 @@
 <meta name="apple-mobile-web-app-title" content="BloodPressure">
 <meta name="application-name" content="BloodPressure">
 <meta name="description" content="BloodPressure 是一款個人血壓紀錄網頁應用程式，可記錄血壓、心跳與備註，並由使用者授權同步至自己的 Google Drive。">
-<meta name="google-site-verification" content="Zu8LYbwdWD6wY7yXAZJBuou2NGcojWJlQpiEUJe7fO8" />
 <!-- GOOGLE SEARCH CONSOLE：
      取得專屬驗證標記後，請將完整的 google-site-verification meta 標記貼在此行下方。
      範例：<meta name="google-site-verification" content="由 Google 提供的驗證碼">
@@ -22,31 +21,10 @@
     <small>個人血壓紀錄與 Google Drive 同步</small>
     <h1>BloodPressure</h1>
     <p class="app-subtitle">血壓紀錄</p>
-    <small class="version-label">Version 10.2</small>
+    <small class="version-label">Version 10.3</small>
   </div>
   <button id="theme" aria-label="切換深色模式">◐</button>
 </header>
-
-<section class="card app-introduction" aria-labelledby="about-title">
-  <h2 id="about-title">關於 BloodPressure</h2>
-  <p>
-    <strong>BloodPressure</strong> 是一款個人血壓紀錄網頁應用程式，
-    可記錄日期、時間、收縮壓、舒張壓、心跳與備註，
-    並提供最近紀錄、平均值、趨勢圖、搜尋及 CSV 匯入／匯出功能。
-  </p>
-  <p>
-    使用者授權 Google Drive 後，應用程式會直接在瀏覽器中，
-    將 <code>BloodPressure.csv</code> 與同步所需的系統資料，
-    儲存在使用者自己選擇的 Google Drive。本站不設置用來集中保存血壓紀錄的後端資料庫。
-  </p>
-  <p>
-    本應用程式只供個人健康紀錄使用，不提供醫療診斷、治療建議或緊急醫療服務。
-  </p>
-  <nav class="policy-links" aria-label="法律資訊">
-    <a href="./privacy.html">隱私權政策</a>
-    <a href="./terms.html">服務條款</a>
-  </nav>
-</section>
 
 <section id="driveStatusCard" class="card sync"><div><div class="sync-title-row"><h2>Google Drive 同步</h2><span id="connectionBadge" class="connection-badge signed-out">未登入</span></div><p id="driveStatus">尚未登入 Google。</p><div id="fileBox" class="file hidden"><b id="fileName"></b><small id="fileId"></small><small id="lastSyncTime">尚未同步</small></div></div><div id="topLoginArea" class="buttons"><button id="login" class="primary">登入 Google</button></div></section>
 
@@ -69,14 +47,59 @@
 <section class="card"><div class="head"><h2>趨勢圖</h2><select id="range"><option value="7">最近 7 筆</option><option value="14">最近 14 筆</option><option value="30">最近 30 筆</option><option value="9999">全部</option></select></div>
 <canvas id="chart" width="900" height="360"></canvas></section>
 
-<section class="card"><div class="head"><h2>歷史紀錄</h2><div class="tools"><input id="search" placeholder="搜尋日期、數值或備註">
-<select id="sort"><option value="desc">最新優先</option><option value="asc">最舊優先</option></select></div></div>
-<div id="empty">尚無紀錄</div><div class="table"><table id="history" class="hidden"><thead><tr><th>日期時間</th><th>血壓</th><th>心跳</th><th>狀態</th><th>備註</th><th>操作</th></tr></thead><tbody></tbody></table></div></section>
+<section class="card">
+<div class="head">
+  <div><h2>歷史紀錄</h2><small id="historyCountLabel">共 0 筆</small></div>
+  <div class="tools"><input id="search" placeholder="搜尋日期、數值或備註">
+  <select id="sort"><option value="desc">最新優先</option><option value="asc">最舊優先</option></select></div>
+</div>
+<div id="empty">尚無紀錄</div>
+<div class="table"><table id="history" class="hidden"><thead><tr><th>日期時間</th><th>血壓</th><th>心跳</th><th>狀態</th><th>備註</th><th>操作</th></tr></thead><tbody></tbody></table></div>
+<details id="historyManage" class="history-manage">
+  <summary>歷史紀錄顯示設定</summary>
+  <div class="history-manage-body">
+    <label>每批顯示筆數
+      <select id="historyPageSize">
+        <option value="10" selected>10 筆</option>
+        <option value="20">20 筆</option>
+        <option value="50">50 筆</option>
+        <option value="all">全部</option>
+      </select>
+    </label>
+    <div class="history-page-info">
+      <span id="historyShownLabel">目前顯示 0 / 0 筆</span>
+      <button id="loadMoreHistory" type="button" class="secondary hidden">載入更多</button>
+    </div>
+  </div>
+</details>
+</section>
 
 <section id="driveManageSection" class="card hidden"><details id="driveManage"><summary>Google Drive 管理</summary><div class="drive-manage-body"><div class="buttons"><button id="pick">選擇既有 CSV</button><button id="create">建立新 CSV</button><button id="sync">立即同步</button><button id="forget" class="danger">解除檔案綁定</button><button id="logout" class="danger">登出 Google</button></div><label id="autoSyncRow" class="check"><input id="autoSync" type="checkbox" checked> 新增、編輯或刪除後自動同步</label></div></details></section>
 <section class="card backup"><div><h2>本機備份</h2><p>BloodPressure.csv 只顯示日期、時間、血壓、心跳與備註；同步資料另存系統檔。</p></div>
 <div class="buttons"><button id="export">下載 CSV</button><label class="upload">匯入 CSV<input id="import" type="file" accept=".csv,text/csv"></label>
 <button id="clear" class="danger">清除本機快取</button></div></section>
+<section class="card app-introduction" aria-labelledby="about-title">
+  <h2 id="about-title">關於 BloodPressure</h2>
+  <p>
+    <strong>BloodPressure</strong> 是一款個人血壓紀錄網頁應用程式，
+    可記錄日期、時間、收縮壓、舒張壓、心跳與備註，
+    並提供最近紀錄、平均值、趨勢圖、搜尋及 CSV 匯入／匯出功能。
+  </p>
+  <p>
+    使用者授權 Google Drive 後，應用程式會直接在瀏覽器中，
+    將 <code>BloodPressure.csv</code> 與同步所需的系統資料，
+    儲存在使用者自己選擇的 Google Drive。本站不設置用來集中保存血壓紀錄的後端資料庫。
+  </p>
+  <p>
+    本應用程式只供個人健康紀錄使用，不提供醫療診斷、治療建議或緊急醫療服務。
+  </p>
+  <nav class="policy-links" aria-label="法律資訊">
+    <a href="./privacy.html">隱私權政策</a>
+    <a href="./terms.html">服務條款</a>
+  </nav>
+</section>
+
+
 <footer class="site-footer">
   <p>BloodPressure 只供個人紀錄，不取代醫療診斷。Google 授權到期後可能需要重新連線。</p>
   <p>
@@ -84,7 +107,7 @@
     <span aria-hidden="true"> · </span>
     <a href="./terms.html">服務條款</a>
   </p>
-  <small>BloodPressure · Version 10.2</small>
+  <small>BloodPressure · Version 10.3</small>
 </footer>
 </main><dialog id="first"><div class="dialog"><h2>選擇同步方式</h2><p>選擇既有 CSV，或在自己的 Google Drive 建立新檔案。</p>
 <button id="dPick">選擇既有 CSV</button><button id="dCreate" class="primary">建立新 CSV</button><button onclick="first.close()">稍後再說</button></div></dialog>

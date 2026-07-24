@@ -1,3 +1,10 @@
+# BloodPressure V10.3
+
+- 歷史紀錄預設顯示 10 筆。
+- 可收合「歷史紀錄顯示設定」，選擇 10、20、50 筆或全部。
+- 支援逐批載入更多。
+- 「關於 BloodPressure」移到頁面最下方。
+
 # BloodPressure V10.2 — OAuth Verification Edition
 
 此版本針對 Google OAuth 品牌驗證調整：
