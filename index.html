@@ -21,12 +21,12 @@
     <small>個人血壓紀錄與 Google Drive 同步</small>
     <h1>BloodPressure</h1>
     <p class="app-subtitle">血壓紀錄</p>
-    <small class="version-label">Version 10.4</small>
+    <small class="version-label">Version 11</small>
   </div>
   <button id="theme" aria-label="切換深色模式">◐</button>
 </header>
 
-<section id="driveStatusCard" class="card sync"><div><div class="sync-title-row"><h2>Google Drive 同步</h2><span id="connectionBadge" class="connection-badge signed-out">未登入</span></div><p id="driveStatus">尚未登入 Google。</p><div id="fileBox" class="file hidden"><b id="fileName"></b><small id="fileId"></small><small id="lastSyncTime">尚未同步</small></div></div><div id="topLoginArea" class="buttons"><button id="login" class="primary">登入 Google</button></div></section>
+<section id="driveStatusCard" class="card sync"><div><div class="sync-title-row"><h2>Google Drive 同步</h2><span id="connectionBadge" class="connection-badge signed-out">未登入</span></div><p id="driveStatus">尚未登入 Google。</p><div id="fileBox" class="file hidden"><b id="fileName"></b><small id="fileId"></small><small id="lastSyncTime">尚未同步</small><small id="pendingSyncLabel">本機待同步：0 筆</small></div></div><div id="topLoginArea" class="buttons"><button id="login" class="primary">登入 Google</button></div></section>
 
 <section class="card"><h2 id="formTitle">新增紀錄</h2><form id="form"><input id="editId" type="hidden">
 <div class="grid"><label>日期<input id="date" type="date" required></label><label>時間<input id="time" type="time" required></label>
@@ -60,18 +60,14 @@
     <small id="historySummaryLabel">10 筆</small>
   </summary>
   <div class="history-manage-body">
-    <label>每批顯示筆數
-      <select id="historyPageSize">
-        <option value="10" selected>10 筆</option>
-        <option value="20">20 筆</option>
-        <option value="50">50 筆</option>
-        <option value="all">全部</option>
-      </select>
-    </label>
-    <div class="history-page-info">
-      <span id="historyShownLabel">目前顯示 0 / 0 筆</span>
-      <button id="loadMoreHistory" type="button" class="secondary hidden">載入更多</button>
+    <div class="history-filter-grid">
+      <label>每批顯示筆數<select id="historyPageSize"><option value="10" selected>10 筆</option><option value="20">20 筆</option><option value="50">50 筆</option><option value="all">全部</option></select></label>
+      <label>紀錄狀態<select id="historyStateFilter"><option value="all">全部</option><option value="abnormal">只看偏高／非常高</option><option value="normal">只看一般範圍</option></select></label>
+      <label>開始日期<input id="historyDateFrom" type="date"></label>
+      <label>結束日期<input id="historyDateTo" type="date"></label>
     </div>
+    <div class="history-filter-actions"><button id="clearHistoryFilters" type="button">清除篩選</button></div>
+    <div class="history-page-info"><span id="historyShownLabel">目前顯示 0 / 0 筆</span><button id="loadMoreHistory" type="button" class="secondary hidden">載入更多</button></div>
   </div>
 </details>
 
@@ -81,8 +77,7 @@
 
 <section id="driveManageSection" class="card hidden"><details id="driveManage"><summary>Google Drive 管理</summary><div class="drive-manage-body"><div class="buttons"><button id="pick">選擇既有 CSV</button><button id="create">建立新 CSV</button><button id="sync">立即同步</button><button id="forget" class="danger">解除檔案綁定</button><button id="logout" class="danger">登出 Google</button></div><label id="autoSyncRow" class="check"><input id="autoSync" type="checkbox" checked> 新增、編輯或刪除後自動同步</label></div></details></section>
 <section class="card backup"><div><h2>本機備份</h2><p>BloodPressure.csv 只顯示日期、時間、血壓、心跳與備註；同步資料另存系統檔。</p></div>
-<div class="buttons"><button id="export">下載 CSV</button><label class="upload">匯入 CSV<input id="import" type="file" accept=".csv,text/csv"></label>
-<button id="clear" class="danger">清除本機快取</button></div></section>
+<div class="buttons"><button id="export">下載 CSV</button><label class="upload">匯入 CSV<input id="import" type="file" accept=".csv,text/csv"></label><button id="exportJson">完整 JSON 備份</button><label class="upload">復原 JSON<input id="importJson" type="file" accept=".json,application/json"></label><button id="clear" class="danger">清除本機快取</button></div></section>
 <section class="card app-introduction" aria-labelledby="about-title">
   <h2 id="about-title">關於 BloodPressure</h2>
   <p>
@@ -112,7 +107,7 @@
     <span aria-hidden="true"> · </span>
     <a href="./terms.html">服務條款</a>
   </p>
-  <small>BloodPressure · Version 10.4</small>
+  <small>BloodPressure · Version 11</small>
 </footer>
 </main><dialog id="first"><div class="dialog"><h2>選擇同步方式</h2><p>選擇既有 CSV，或在自己的 Google Drive 建立新檔案。</p>
 <button id="dPick">選擇既有 CSV</button><button id="dCreate" class="primary">建立新 CSV</button><button onclick="first.close()">稍後再說</button></div></dialog>

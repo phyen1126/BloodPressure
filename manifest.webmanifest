@@ -26,5 +26,5 @@
       "purpose": "maskable"
     }
   ],
-  "description": "個人血壓、心跳與備註紀錄，並可由使用者授權同步至自己的 Google Drive。"
+  "description": "個人血壓紀錄、離線保存與 Google Drive 同步。"
 }
